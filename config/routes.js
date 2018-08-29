@@ -29,7 +29,7 @@ module.exports.routes = {
     controller: 'AuthController',
     action: 'signUp',
   },
-  [`POST ${prefix}/authtoken`] : { 
+  'POST /ws/v1/authtoken' : { 
     controller: 'AuthController',
     action: 'token',
   },
