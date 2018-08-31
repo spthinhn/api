@@ -12,8 +12,8 @@ module.exports = {
 
 	  	var user = await User.findOne({username: username});
 	  	if (user) {
-	  		var greeting = await sails.helpers.validate.with({ name: user.username });
-	  		console.log(greeting);
+	  		// var greeting = await sails.helpers.validate.with({ name: user.username });
+	  		// console.log(greeting);
 
 			password = sails.config.globals.md5(password + user.salt);
 			if (password == user.password) {
@@ -32,58 +32,56 @@ module.exports = {
 			status: 400,
 			message: "user not exists"
 		});
-		// .exec(function(err, user) {
-		// 	if (err) return res.end('404', 'err');
-
-		// 	if (user) {
-		// 		password = sails.config.globals.md5(password + user.salt);
-		// 		if (password == user.password) {
-		// 			var token =	sails.config.globals.md5(username);
-		// 			console.log(token);
-		// 			var expired = Date.now();
-		// 			console.log(expired);
-
-		// 			// await Token.create({token: token, expired: expired, user_id: user.guid})
-		// 			// .exec(function(err, token) {
-		// 			// 	console.log(err);
-		// 			// 	console.log(token);
-		// 			// 	return res.json({
-		// 	  // 				status: 200,
-		// 	  // 				token: token,
-		// 	  // 				user: user
-		// 	  // 			});	
-		// 			// });
-		// 			// console.log(1);
-		// 		}
-	 //  			return res.json({
-	 //  				status: 400,
-	 //  				message: "user exists"
-	 //  			});
-	 //  		}
-		// });
 	  },
   signUp: async function(req, res) {
   	var username = req.param('username');
   	var password = req.param('password');
+  	var birthdate = req.param('birthdate');
+  	var gender = req.param('gender');
+  	var mobilelogin = req.param('mobilelogin');
+  	var email = req.param('email');
 
-  	await User.findOrCreate({username: username}, {username: username, password: password})
-	.exec(function(err, user, wasCreated) {
-		if (err) return res.end('404', 'err');
+	var users = await User.find({
+      or: [
+        {username: username},
+        {email: email}
+      ]
+    });
+	users.forEach( function(user, index){
+      if (username == user.username) {
+      	return res.alert(400, "username exist", null);
+      }
+      if (email == user.email) {
+        return res.alert(400, "email exist", null);
+      }
+    });
+ //  	await User.find({
+	//   or : [
+	//     { username: username},
+	//     { email: email }
+	//   ]
+	// }).exec(function(err, users) {
+ //  		console.log(users);
+ //  	});
 
-		if (wasCreated) {
-			return res.json({
-				status: 200,
-				message: user
-			});
-		}
+ //  	await User.findOrCreate({username: username}, {username: username, password: password})
+	// .exec(function(err, user, wasCreated) {
+	// 	if (err) return res.end('404', 'err');
 
-		if (user) {
-  			return res.json({
-  				status: 400,
-  				message: "user exists"
-  			});
-  		}
-	});
+	// 	if (wasCreated) {
+	// 		return res.json({
+	// 			status: 200,
+	// 			message: user
+	// 		});
+	// 	}
+
+	// 	if (user) {
+ //  			return res.json({
+ //  				status: 400,
+ //  				message: "user exists"
+ //  			});
+ //  		}
+	// });
   }
 
 };

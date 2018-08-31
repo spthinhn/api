@@ -25,13 +25,13 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'POST /register': { 
-    controller: 'AuthController',
-    action: 'signUp',
-  },
   'POST /ws/v1/authtoken' : { 
     controller: 'AuthController',
     action: 'token',
+  },
+  'POST /ws/v1/register': { 
+    controller: 'AuthController',
+    action: 'signUp',
   },
   
 
