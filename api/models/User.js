@@ -9,9 +9,12 @@ module.exports = {
 
     tableName: 'users',
     attributes: {
-        username: { type: 'string', required: true },
-        email: { type: 'string', required: true },
-        password: { type: 'string', required: true }
+        username: 	 { type: 'string', required: false },
+        email: 		 { type: 'string', required: false },
+        password: 	 { type: 'string', required: true },
+        salt: 	 	 { type: 'string', required: true },
+        mobilelogin: { type: 'string', required: false },
+        gender: 	 { type: 'string', required: false }
     }
 };
 

@@ -40,29 +40,40 @@ module.exports = {
   	var gender = req.param('gender');
   	var mobilelogin = req.param('mobilelogin');
   	var email = req.param('email');
+  	console.log(mobilelogin);
 
-	var users = await User.find({
-      or: [
-        {username: username},
-        {email: email}
-      ]
-    });
-	users.forEach( function(user, index){
-      if (username == user.username) {
-      	return res.alert(400, "username exist", null);
+  	if (email) {
+  		var users = await User.find({
+	      or: [
+	        {email: email}
+	      ]
+	    });
+  	}
+  	if (mobilelogin) {
+		var users = await User.find({
+	      or: [
+	        {mobilelogin: mobilelogin}
+	      ]
+	    });
+  	}
+	await users.forEach( function(user, index){
+      if (email) {
+	      if (email == user.email) {
+	        return res.alert(400, 2);
+	      }
       }
-      if (email == user.email) {
-        return res.alert(400, "email exist", null);
+      if (mobilelogin) {
+	      if (mobilelogin == user.mobilelogin) {
+	        return res.alert(400, 3);
+	      }
       }
     });
- //  	await User.find({
-	//   or : [
-	//     { username: username},
-	//     { email: email }
-	//   ]
-	// }).exec(function(err, users) {
- //  		console.log(users);
- //  	});
+    var salt = sails.config.globals.crypto.randomBytes(10).toString('hex');
+    password = sails.config.globals.md5(password + salt);
+
+	await User.create({email: email, password: password, salt: salt}).exec(function(err, user) {
+		if (err) return res.alert(403);
+	});
 
  //  	await User.findOrCreate({username: username}, {username: username, password: password})
 	// .exec(function(err, user, wasCreated) {

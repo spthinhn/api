@@ -50,5 +50,6 @@ module.exports.globals = {
   sails: true,
 
   md5: require('md5'),
+  crypto: require("crypto"),
 
 };
